@@ -47,9 +47,20 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ error: "Missing email or password" });
     return;
   }
+  const isEmail = (emailOrPhone: string): boolean => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(emailOrPhone);
+  };
+  let user;
 
   try {
-    const user = await User.findOne({ where: { email } });
+    // Check email or phone number
+    if (isEmail(email)) {
+      user = await User.findOne({ where: { email: email } });
+    } else {
+      user = await User.findOne({ where: { phone_number: email } });
+    }
+
 
     if (!user || !(await bcrypt.compare(password, user.password_hash))) {
       res.status(401).json({ error: "Credenciales inválidas" });

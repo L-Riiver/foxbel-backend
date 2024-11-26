@@ -16,7 +16,7 @@ export const searchDeezer = async (query: string) => {
       artist_img: track.artist.picture_big,
       preview: track.preview,
       album: track.album.title,
-      albumCover: track.album.cover_big,
+      album_cover: track.album.cover_big,
     }));
 
     return { total: response.data.total, tracks: cleanedData };

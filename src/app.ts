@@ -7,6 +7,7 @@ import userRoutes from "./routes/userRoutes";
 //database
 import sequelize from "./config/database";
 import path from "path";
+
 sequelize.sync({ alter: true })
   .then(() => console.log("Database synced!"))
   .catch((err) => console.error("Error syncing database:", err));
@@ -23,6 +24,7 @@ app.use("/api/deezer", deezerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/img/uploads", express.static(path.join(__dirname, "../public/img/uploads")));
 
+app.use("/api/favorites", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
