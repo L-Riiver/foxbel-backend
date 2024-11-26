@@ -72,8 +72,8 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
         last_name: user.last_name, 
         email: user.email,
         profile_picture: user.profile_picture,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       } 
     });
   } catch (error) {
@@ -85,7 +85,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 // Get User Profile
 export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.id; // Obtenemos el id del usuario desde el token decodificado
+    const userId = (req as any).user.id; 
     const user = await User.findByPk(userId);
 
     if (!user) {
@@ -100,8 +100,8 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
         last_name: user.last_name,
         email: user.email,
         profile_picture: user.profile_picture,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
     });
   } catch (error) {
@@ -128,16 +128,13 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Actualizar campos
     user.first_name = first_name || user.first_name;
     user.last_name = last_name || user.last_name;
     user.email = email || user.email;
 
-    // Subir imagen si se incluye
     if (req.file) {
-      const uploadPath = path.join(__dirname, "../img/uploads", req.file.filename);
-      fs.renameSync(req.file.path, uploadPath);
-      user.profile_picture = `/img/uploads/${req.file.filename}`;
+      const publicPath = `http://localhost:5000/img/uploads/${req.file.filename}`; 
+      user.profile_picture = publicPath;
     }
 
     await user.save();
@@ -150,6 +147,7 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         last_name: user.last_name,
         email: user.email,
         profile_picture: user.profile_picture,
+        createdAt: user.createdAt,
       },
     });
   } catch (error) {

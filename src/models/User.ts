@@ -10,11 +10,11 @@ interface UserAttributes {
   phone_number?: string;
   gender?: string;
   profile_picture?: string;
-  created_at?: Date;
-  updated_at?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id" | "created_at" | "updated_at"> {}
+interface UserCreationAttributes extends Optional<UserAttributes, "id" | "createdAt" | "updatedAt"> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
@@ -25,8 +25,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public phone_number?: string;
   public gender?: string;
   public profile_picture?: string;
-  public created_at?: Date;
-  public updated_at?: Date;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 }
 
 User.init(

@@ -7,7 +7,7 @@ import { Request, Response } from 'express';
 // Configuración de multer para subir archivos
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: any, destination: string) => void) => {
-    cb(null, 'img/uploads/'); // Carpeta donde se guardarán los archivos
+    cb(null, './public/img/uploads/'); // Carpeta donde se guardarán los archivos
   },
   filename: (req: Request, file: Express.Multer.File, cb: (error: any, filename: string) => void) => {
     cb(null, `${Date.now()}-${file.originalname}`); // Nombre único para el archivo
