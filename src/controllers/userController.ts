@@ -3,10 +3,6 @@ import bcrypt from "bcrypt";
 const jwt = require("jsonwebtoken");
 import { User } from "../models";
 
-import fs from "fs";
-import path from "path";
-
-import { authenticateToken } from "../middlewares/authMiddleware";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
@@ -15,14 +11,16 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
   const { first_name, last_name, email, password, gender, phone_number } = req.body;
 
   if (!first_name || !last_name || !email || !password) {
-    // res.status(400).json({ error: "Missing required fields" });
-    res.status(400).json({ error: "Missing required fields", first_name: first_name,last_name: last_name, email: email, password: password});
+    res.status(400).json({ error: "Missing required fields" });
+    //Debug
+    // res.status(400).json({ error: "Missing required fields", first_name: first_name,last_name: last_name, email: email, password: password});
     return;
   }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    //New user
     const user = await User.create({
       first_name,
       last_name,
@@ -32,7 +30,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       phone_number,
     });
 
-    res.status(201).json({ message: "User registered successfully", user });
+    res.status(201).json({ message: "Usuario registrado con éxito", user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to register user" });
@@ -47,6 +45,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ error: "Missing email or password" });
     return;
   }
+  //if string is a email or phone number
   const isEmail = (emailOrPhone: string): boolean => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(emailOrPhone);
@@ -54,7 +53,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   let user;
 
   try {
-    // Check email or phone number
+    // Check email or phone number in db
     if (isEmail(email)) {
       user = await User.findOne({ where: { email: email } });
     } else {
@@ -144,6 +143,7 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
     user.email = email || user.email;
 
     if (req.file) {
+      //use backend storage url
       const publicPath = `http://localhost:5000/img/uploads/${req.file.filename}`; 
       user.profile_picture = publicPath;
     }

@@ -16,10 +16,12 @@ sequelize.sync({ alter: true })
 dotenv.config();
 
 const app = express();
-
+//Cors
 app.use(cors());
+//server express
 app.use(express.json());
 
+//api routes
 app.use("/api/deezer", deezerRoutes);
 app.use("/api/users", userRoutes);
 app.use("/img/uploads", express.static(path.join(__dirname, "../public/img/uploads")));

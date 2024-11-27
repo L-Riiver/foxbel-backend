@@ -4,6 +4,7 @@ import { Favorite } from "../models";
 
 declare global {
   namespace Express {
+    //Declare file and user objects
     interface Request {
       file?: {
         filename: string;

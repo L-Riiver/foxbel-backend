@@ -6,12 +6,14 @@ export const addFavorite = async (req: Request, res: Response): Promise<void> =>
   const { title, artist, album, album_cover, preview } = req.body;
   const user_id = (req as any).user.id;
 
+  //permission
   if (!user_id) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
 
   try {
+    //Stored procedure 
     await sequelize.query(
       "CALL AddFavorite(:user_id, :title, :artist, :album, :album_cover, :preview)", 
       {
@@ -37,6 +39,7 @@ export const removeFavorite = async (req: Request, res: Response): Promise<void>
   const { id } = req.body;
   const user_id = (req as any).user.id;
 
+  //permission
   if (!user_id) {
     res.status(401).json({ error: "Unauthorized" });
     return;
@@ -61,6 +64,7 @@ export const removeFavorite = async (req: Request, res: Response): Promise<void>
 export const getFavorites = async (req: Request, res: Response): Promise<void> => {
   const user_id = (req as any).user.id;
 
+  //permission
   if (!user_id) {
     res.status(401).json({ error: "Unauthorized" });
     return;
